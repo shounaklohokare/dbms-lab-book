@@ -1,0 +1,9 @@
+USE student_competition;
+
+DROP TABLES student_competition, student, competition;
+
+CREATE TABLE student(SREG_NO INT PRIMARY KEY, NAME VARCHAR(30), CLASS VARCHAR(10));
+
+CREATE TABLE competition(C_NO INT PRIMARY KEY, NAME VARCHAR(20), TYPE VARCHAR(15));
+
+CREATE TABLE student_competition(SREG_NO INT, FOREIGN KEY (SREG_NO) REFERENCES student(SREG_NO), C_NO INT, FOREIGN KEY (C_NO) REFERENCES competition(C_NO), S_RANK INT, C_YEAR INT);

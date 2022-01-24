@@ -1,0 +1,64 @@
+DROP TABLES student, membership, book, iss_rec;
+
+CREATE TABLE student(STUD_NO VARCHAR(10) PRIMARY KEY, STUD_NAME VARCHAR(50));
+
+CREATE TABLE membership(MEM_NO VARCHAR(10) PRIMARY KEY, STUD_NO VARCHAR(10), FOREIGN KEY (STUD_NO) REFERENCES student(STUD_NO));
+
+CREATE TABLE book(BOOK_NO VARCHAR(10) PRIMARY KEY, BOOK_NAME TEXT, AUTHOR VARCHAR(100));
+
+CREATE TABLE iss_rec(ISS_NO VARCHAR(10) PRIMARY KEY, ISS_DATE DATE, MEM_NO VARCHAR(10), FOREIGN KEY (MEM_NO) REFERENCES membership(MEM_NO), BOOK_NO VARCHAR(10), FOREIGN KEY (BOOK_NO) REFERENCES book(BOOK_NO));
+
+INSERT INTO student VALUES('1', 'Tobey');
+INSERT INTO student VALUES('2', 'Andrew');
+INSERT INTO student VALUES('3', 'Tom');
+INSERT INTO student VALUES('4', 'Zendaya');
+INSERT INTO student VALUES('5', 'Jimmy');
+
+INSERT INTO membership VALUES('101', '1');
+INSERT INTO membership VALUES('201', '2');
+INSERT INTO membership VALUES('301', '3');
+INSERT INTO membership VALUES('401', '4');
+INSERT INTO membership VALUES('501', '5');
+
+INSERT INTO book VALUES('1001', 'A Game Of Thrones', 'George RR Martin');
+INSERT INTO book VALUES('1002', 'Savarkar : Echoes Of A Forgotten Past', 'Vikram Sampath');
+INSERT INTO book VALUES('1003', 'Database System Concepts', 'Korth');
+INSERT INTO book VALUES('1004', 'Homo Sapiens', 'Yuval Noah Harari');
+INSERT INTO book VALUES('1005', 'Elon Musk', 'Ashlee Vance');
+
+INSERT INTO iss_rec VALUES('21', '2021/04/19', '101', '1001');
+INSERT INTO iss_rec VALUES('22', '2021/05/11', '201', '1002');
+INSERT INTO iss_rec VALUES('23', '2021/05/22', '301', '1003');
+INSERT INTO iss_rec VALUES('24', '2021/06/1', '401', '1004');
+INSERT INTO iss_rec VALUES('25', '2021/07/24', '501', '1005');
+INSERT INTO iss_rec VALUES('26', '2021/08/12', '301', '1005');
+
+SELECT * FROM student;
+SELECT * FROM membership;
+SELECT * FROM book;
+SELECT * FROM iss_rec;
+
+SELECT B.BOOK_NAME
+FROM book B
+WHERE AUTHOR = 'Korth';
+
+SELECT B.BOOK_NAME
+FROM book B
+ORDER BY B.BOOK_NAME;
+
+SELECT S.STUD_NAME
+FROM student S
+ORDER BY S.STUD_NAME;
+
+SELECT S.STUD_NAME, COUNT(*) AS CNT_OF_BOOKS
+FROM student S
+JOIN membership M ON M.STUD_NO = S.STUD_NO
+JOIN iss_rec ISS ON ISS.MEM_NO = M.MEM_NO
+GROUP BY S.STUD_NAME;
+
+SELECT B.BOOK_NAME
+FROM book B
+JOIN iss_rec ISS ON ISS.BOOK_NO = B.BOOK_NO
+JOIN membership M ON M.MEM_NO = ISS.MEM_NO
+JOIN student S ON S.STUD_NO = M.STUD_NO
+WHERE S.STUD_NO = '5';
